@@ -50,7 +50,7 @@ export default function ListarCidade() {
           }}
         >
           <h1>Lista de Cidades</h1>
-          <Link to="#" className="btn btn-add">
+          <Link to="/sistema/cidade/criar" className="btn btn-add">
             <span className="btn-icon">
               <i>
                 <FaPlus />  
@@ -75,7 +75,7 @@ export default function ListarCidade() {
                 <td>{model.codCidade}</td>
                 <td>{model.nomeCidade}</td>
                 <td className="center actions">
-                  <Link to="" className="btn btn-edit">
+                  <Link to="/sistema/cidade/alterar" className="btn btn-edit">
                     <span className="btn-icon">
                       <i>
                         <BsPencilSquare />
@@ -85,7 +85,7 @@ export default function ListarCidade() {
                   </Link>
                 </td>
                 <td className="center actions">
-                  <Link to="" className=" btn btn-delete">
+                  <Link to="/sistema/cidade/excluir" className=" btn btn-delete">
                     <span className="btn-icon">
                       <i>
                         <FaRegTrashAlt />
@@ -95,7 +95,7 @@ export default function ListarCidade() {
                   </Link>
                 </td>
                 <td className="center actions">
-                  <Link to="" className="btn btn-show">
+                  <Link to="/sistema/cidade/consulta" className="btn btn-show">
                     <span className="btn-icon">
                       <i>
                         <FaMagnifyingGlass />
