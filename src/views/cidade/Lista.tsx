@@ -64,9 +64,7 @@ export default function ListarCidade() {
             <tr>
               <th>Código</th>
               <th>Nome</th>
-              <th className="center actions">Atualizar</th>
-              <th className="center actions">Excluir</th>
-              <th className="center actions">Show</th>
+              <th className="center actions">Açôes</th>
             </tr>
           </thead>
           <tbody>
@@ -83,8 +81,6 @@ export default function ListarCidade() {
                     </span>
                    Atualizar
                   </Link>
-                </td>
-                <td className="center actions">
                   <Link to="/sistema/cidade/excluir" className=" btn btn-delete">
                     <span className="btn-icon">
                       <i>
@@ -93,9 +89,7 @@ export default function ListarCidade() {
                     </span>
                     Excluir
                   </Link>
-                </td>
-                <td className="center actions">
-                  <Link to="/sistema/cidade/consulta" className="btn btn-show">
+                  <Link to="/sistema/cidade/consultar" className="btn btn-show">
                     <span className="btn-icon">
                       <i>
                         <FaMagnifyingGlass />
