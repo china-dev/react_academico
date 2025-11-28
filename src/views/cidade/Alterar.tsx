@@ -1,8 +1,56 @@
+import { useEffect, useState } from "react";
 import { FaSave } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
+import { useParams } from "react-router-dom";
+import {
+  apiGetCidade,
+  apiPutCidade,
+} from "../../services/cidade/api/api.cidade";
+import { CIDADE } from "../../services/cidade/constants/cidade.constants";
+import type { Cidade } from "../../services/cidade/type/Cidade";
 
+export default function AlterarCidade() {
+  const { idCidade } = useParams<{ idCidade: string }>();
+  const [model, setModel] = useState<Cidade | null>(null);
 
-export default function AlterarCidade () {
+  useEffect(() => {
+    async function getCidade() {
+      try {
+        if (idCidade) {
+          const response = await apiGetCidade(idCidade);
+          console.log(response.data.dados);
+          if (response.data.dados) {
+            setModel(response.data.dados);
+          }
+        }
+      } catch (error: any) {
+        console.log(error);
+      }
+    }
+
+    getCidade();
+  }, [idCidade]);
+
+  const handleChangeField = (name: keyof Cidade, value: string) => {
+    setModel((prev) => ({ ...prev, [name]: value }));
+    console.log(model);
+  };
+
+  const onSubmitForm = async (e: any) => {
+    // não deixa executar o processo normal
+    e.preventDefault();
+
+    if (!idCidade || !model) {
+      return;
+    }
+
+    try {
+      const response = apiPutCidade(idCidade, model);
+      console.log(response);
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
 
   const getInputClass = () => {
     return "form-control app-label mt-2";
@@ -11,59 +59,65 @@ export default function AlterarCidade () {
   return (
     <div className="display">
       <div className="card animated fadeInDown">
-        <h2>Alterar cidade</h2>
-
-        <form action="">
+        <h2>Alterar Cidade</h2>
+        <form onSubmit={(e) => onSubmitForm(e)}>
           <div className="mb-2 mt-4">
-            <label htmlFor="CodCidade" className="app-label" >
-              Código
+            <label htmlFor="codCidade" className="app-label">
+              Código:
             </label>
             <input
+              id="codCidade"
+              name="codCidade"
+              value={model?.codCidade}
               className={getInputClass()}
-              type="text"
-              name="CodCidade" 
-              id="CodCidade"
               readOnly={false}
               disabled={false}
               autoComplete="off"
+              onChange={(e) =>
+                handleChangeField(CIDADE.FIELDS.CODIGO, e.target.value)
+              }
             />
           </div>
           <div className="mb-2 mt-4">
-            <label htmlFor="NomeCidade" className="app-label" >
-              Nome
+            <label htmlFor="nomeCidade" className="app-label">
+              Nome:
             </label>
             <input
+              id="nomeCidade"
+              name="nomeCidade"
+              value={model?.nomeCidade}
               className={getInputClass()}
-              type="text"
-              name="NomeCidade" 
-              id="NomeCidade"
               readOnly={false}
               disabled={false}
               autoComplete="off"
+              onChange={(e) =>
+                handleChangeField(CIDADE.FIELDS.NOME, e.target.value)
+              }
             />
           </div>
           <div className="btn-content mt-4">
-            <button 
-              id="submit" 
+            <button
+              id="submit"
               type="submit"
               className="btn btn-success"
+              title="Cadastrar uma nova cidade"
             >
               <span className="btn-icon">
                 <i>
-                  <FaSave/>
+                  <FaSave />
                 </i>
               </span>
               Salvar
             </button>
-
-            <button 
-              id="cancel" 
-              type="submit"
+            <button
+              id="cancel"
+              type="button"
               className="btn btn-cancel"
+              title="Cancelar o Cadastro da cidade"
             >
               <span className="btn-icon">
                 <i>
-                  <MdCancel/>
+                  <MdCancel />
                 </i>
               </span>
               Cancelar
@@ -72,5 +126,5 @@ export default function AlterarCidade () {
         </form>
       </div>
     </div>
-  )
+  );
 }

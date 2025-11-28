@@ -1,23 +1,22 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
-import type { Cidade } from "../../type/Cidade";
-import { Link } from "react-router-dom";
+import { BsPencilSquare } from "react-icons/bs";
 import { FaPlus, FaRegTrashAlt } from "react-icons/fa";
 import { FaMagnifyingGlass } from "react-icons/fa6";
-import { BsPencilSquare } from "react-icons/bs";
+import { Link } from "react-router-dom";
+import { apiGetCidades } from "../../services/cidade/api/api.cidade";
+import { CIDADE } from "../../services/cidade/constants/cidade.constants";
+import type { Cidade } from "../../services/cidade/type/Cidade";
+import { ROTA } from "../../services/router/url";
 
 const buscarTodasCidades = async (): Promise<Cidade[] | null> => {
   try {
-    const response =   await axios
-        .get("http://localhost:8000/rest/sistema/cidade/listar")
-  
+    const response = await apiGetCidades();
     return response.data.dados;
-  }
-  catch (error: any){
-    console.error('erro');
+  } catch (error: any) {
+    console.log(error);
   }
   return null;
-}
+};
 
 export default function ListarCidade() {
   // useState = hook - gancho - função
@@ -30,14 +29,12 @@ export default function ListarCidade() {
   useEffect(() => {
     async function getCidades() {
       const cidades = await buscarTodasCidades();
-      if(cidades) {
+      if (cidades) {
         setModels(cidades);
       }
     }
     getCidades();
   }, []);
-
-  console.log(models);
 
   return (
     <div className="display">
@@ -49,39 +46,48 @@ export default function ListarCidade() {
             alignItems: "center",
           }}
         >
-          <h1>Lista de Cidades</h1>
+          <h2>{CIDADE.TITULO.LISTA}</h2>
           <Link to="/sistema/cidade/criar" className="btn btn-add">
             <span className="btn-icon">
               <i>
-                <FaPlus />  
+                <FaPlus />
               </i>
             </span>
-             Novo
+            Novo
           </Link>
         </div>
+        <br />
         <table>
           <thead>
             <tr>
-              <th>Código</th>
-              <th>Nome</th>
-              <th className="center actions">Açôes</th>
+              <th>{CIDADE.LABEL.CODIGO}</th>
+              <th>{CIDADE.LABEL.NOME}</th>
+              <th className="center actions" colSpan={3}>
+                Ação
+              </th>
             </tr>
           </thead>
           <tbody>
             {models?.map((model) => (
-              <tr>
+              <tr key={model.idCidade}>
                 <td>{model.codCidade}</td>
                 <td>{model.nomeCidade}</td>
                 <td className="center actions">
-                  <Link to="/sistema/cidade/alterar" className="btn btn-edit">
+                  <Link
+                    to={`${ROTA.CIDADE.ATUALIZAR}/${model.idCidade}`}
+                    className="btn btn-edit"
+                  >
                     <span className="btn-icon">
                       <i>
                         <BsPencilSquare />
                       </i>
                     </span>
-                   Atualizar
+                    Atualizar
                   </Link>
-                  <Link to="/sistema/cidade/excluir" className=" btn btn-delete">
+                  <Link
+                    to={`${ROTA.CIDADE.EXCLUIR}/${model.idCidade}`}
+                    className="btn btn-delete"
+                  >
                     <span className="btn-icon">
                       <i>
                         <FaRegTrashAlt />
@@ -89,7 +95,10 @@ export default function ListarCidade() {
                     </span>
                     Excluir
                   </Link>
-                  <Link to="/sistema/cidade/consultar" className="btn btn-show">
+                  <Link
+                    to={`${ROTA.CIDADE.POR_ID}/${model.idCidade}`}
+                    className="btn btn-info"
+                  >
                     <span className="btn-icon">
                       <i>
                         <FaMagnifyingGlass />
