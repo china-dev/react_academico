@@ -8,54 +8,17 @@ import {
 } from "../../services/cidade/api/api.cidade";
 import { CIDADE } from "../../services/cidade/constants/cidade.constants";
 import type { Cidade } from "../../services/cidade/type/Cidade";
+import { useAlterar } from "../../services/hook/useAlterar";
 
 export default function AlterarCidade() {
-  const { idCidade } = useParams<{ idCidade: string }>();
-  const [model, setModel] = useState<Cidade | null>(null);
-
-  useEffect(() => {
-    async function getCidade() {
-      try {
-        if (idCidade) {
-          const response = await apiGetCidade(idCidade);
-          console.log(response.data.dados);
-          if (response.data.dados) {
-            setModel(response.data.dados);
-          }
-        }
-      } catch (error: any) {
-        console.log(error);
-      }
-    }
-
-    getCidade();
-  }, [idCidade]);
-
-  const handleChangeField = (name: keyof Cidade, value: string) => {
-    setModel((prev) => ({ ...prev, [name]: value }));
-    console.log(model);
-  };
-
-  const onSubmitForm = async (e: any) => {
-    // não deixa executar o processo normal
-    e.preventDefault();
-
-    if (!idCidade || !model) {
-      return;
-    }
-
-    try {
-      const response = apiPutCidade(idCidade, model);
-      console.log(response);
-    } catch (error: any) {
-      console.log(error);
-    }
-  };
-
-  const getInputClass = () => {
-    return "form-control app-label mt-2";
-  };
-
+  
+  const {
+    model,
+    onSubmitForm,
+    getInputClass,
+    handleChangeField
+   } = useAlterar();
+ 
   return (
     <div className="display">
       <div className="card animated fadeInDown">

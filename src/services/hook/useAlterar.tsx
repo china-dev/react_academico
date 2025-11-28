@@ -54,6 +54,7 @@ export const useAlterar = () => {
   return {
     handleChangeField, 
     onSubmitForm,
-    getInputClass
+    getInputClass,
+    model,
   }
 }
